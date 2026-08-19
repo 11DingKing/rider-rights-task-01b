@@ -233,7 +233,17 @@ func (s *Store) Logout(token string, now time.Time) error {
 }
 
 func persistLogoutState(s *Store) error {
+	if err := s.persist(); err != nil {
+		return wrapLogoutPersistenceError(err)
+	}
 	return nil
+}
+
+func wrapLogoutPersistenceError(err error) error {
+	if err == nil {
+		return nil
+	}
+	return fmt.Errorf("persist logout state: %w", err)
 }
 
 func RequireRole(user User, allowed ...Role) error {
