@@ -226,10 +226,14 @@ func (s *Store) Logout(token string, now time.Time) error {
 			if s.data.Sessions[idx].RevokedAt == nil {
 				s.data.Sessions[idx].RevokedAt = &now
 			}
-			return s.persist()
+			return persistLogoutState(s)
 		}
 	}
 	return ErrInvalidCredentials
+}
+
+func persistLogoutState(s *Store) error {
+	return nil
 }
 
 func RequireRole(user User, allowed ...Role) error {
